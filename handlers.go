@@ -39,6 +39,22 @@ func getMerchantLastUpdate(w http.ResponseWriter, r *http.Request) {
 
 }
 
+func generateDummyData(w http.ResponseWriter, r *http.Request) {
+
+	for i := 0; i < 10; i++ {
+		result, err := redis.NewRedis().Set(strconv.Itoa(i), getCurrentTimestamp())
+
+		log.Printf("%d", i)
+
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		log.Printf("%v", result)
+	}
+
+}
+
 func getCurrentTimestamp() string {
 	return strconv.FormatInt(time.Now().UnixNano()/int64(time.Millisecond), 10)
 }
