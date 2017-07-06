@@ -18,10 +18,25 @@ func merchantSaveOrUpdate(w http.ResponseWriter, r *http.Request) {
 	result, err := redis.NewRedis().Set(merchantID, getCurrentTimestamp())
 
 	if err != nil {
-		log.Fatal(err)
+		log.Printf("%v", err)
 	}
 
 	log.Printf("%v", result)
+
+}
+
+func merchantSaveDummyData(w http.ResponseWriter, r *http.Request) {
+
+	for i := 0; i < 10000; i++ {
+		merchantID := strconv.Itoa(i)
+		result, err := redis.NewRedis().Set(merchantID, getCurrentTimestamp())
+
+		if err != nil {
+			log.Printf("%v", err)
+		}
+
+		log.Printf("Result for key %s : %v", merchantID, result)
+	}
 
 }
 
@@ -30,27 +45,13 @@ func getMerchantLastUpdate(w http.ResponseWriter, r *http.Request) {
 	result, err := redis.NewRedis().Get(merchantID)
 
 	if err != nil {
-		log.Fatal(err)
+		w.WriteHeader(404)
+		log.Printf("%v", err)
 	}
 
 	if err2 := json.NewEncoder(w).Encode(result); err2 != nil {
-		panic(err2)
-	}
-
-}
-
-func generateDummyData(w http.ResponseWriter, r *http.Request) {
-
-	for i := 0; i < 10; i++ {
-		result, err := redis.NewRedis().Set(strconv.Itoa(i), getCurrentTimestamp())
-
-		log.Printf("%d", i)
-
-		if err != nil {
-			log.Fatal(err)
-		}
-
-		log.Printf("%v", result)
+		w.WriteHeader(500)
+		log.Printf("%v", err)
 	}
 
 }

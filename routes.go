@@ -27,9 +27,9 @@ var routes = Routes{
 		getMerchantLastUpdate,
 	},
 	Route{
-		"generateDummyData",
+		"merchantSaveDummyData",
 		"GET",
-		"/merchant/dummy",
-		generateDummyData,
+		"/dummy",
+		merchantSaveDummyData,
 	},
 }
